@@ -38,11 +38,14 @@ end)
 local eventMethods = {}
 function eventMethods:On(...)
 	local numParams = select('#', ...)
+	assert(numParams >= 2, ':On() requires atleast two parameters')
 	local callback = select(numParams, ...)
-	assert(type(callback) == 'function')
+	assert(type(callback) == 'function', ':On() requires a callback function as last parameter')
 
 	for index = numParams - 1, 1, -1 do
-		self._events[select(index, ...)] = callback
+		local event = select(index, ...)
+		assert(type(event) == 'string', ':On() received incorrect parameter')
+		self._events[event] = callback
 	end
 end
 
