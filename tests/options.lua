@@ -36,12 +36,24 @@ local function Config(self)
 	Slider:On('Update', function(self, event, ...)
 		print('Slider received "' .. event .. '" event, arguments:', ...)
 	end)
+
+	local ColorPicker = self:CreateColorPicker('colorpicker')
+	ColorPicker:SetPoint('TOPLEFT', Slider, 'BOTTOMLEFT', 0, -22)
+	ColorPicker:EnableAlpha(true)
+	ColorPicker:SetText('This is a ColorPicker widget')
+	ColorPicker:On('Update', function(self, event, r, g, b, a, hex)
+		print('ColorPicker received and update with values', r, g, b, a, hex)
+	end)
+	ColorPicker:On('Open', function(self, event)
+		print('ColorPicker received "' .. event .. '" event')
+	end)
 end
 
 local defaults = {
 	checkbutton = true,
 	dropdown = 3,
 	slider = 1,
+	colorpicker = 'ff003399',
 }
 
 local Panel = LibStub('Wasabi'):New('Wasabi', 'WasabiTestsDB', defaults)
