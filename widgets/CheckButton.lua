@@ -23,6 +23,8 @@ Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
 		Button[method] = func
 	end
 
+	Wasabi:InjectBaseWidget(Button, 'Text')
+
 	panel.objects[key] = Button
 
 	return Button
