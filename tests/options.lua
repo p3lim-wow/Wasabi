@@ -12,16 +12,25 @@ local function Config(self)
 	CheckButton:SetPoint('TOPLEFT', Description, 'BOTTOMLEFT', -2, -10)
 	CheckButton:SetText('This is a CheckButton widget')
 	CheckButton:SetNewFeature(true)
-	CheckButton:On('Update', function(self, value)
+	CheckButton:On('Update', function(self, event, value)
 		print('CheckButton received an update with value "' .. tostring(value) .. '"')
 	end)
-	CheckButton:On('Click', function(self)
+	CheckButton:On('Click', function(self, event)
 		print('CheckButton received a click')
+	end)
+
+	local DropDown = self:CreateDropDown('dropdown')
+	DropDown:SetPoint('TOPLEFT', CheckButton, 'BOTTOMLEFT', 0, -10)
+	DropDown:SetValues('Cabbage', 'Mustard', 'Wasabi') -- Can also be a table (pairs or indexed)
+	DropDown:SetText('This is a DropDown widget with three values')
+	DropDown:On('Update', 'Toggle', 'ItemClick', function(self, event, ...)
+		print('DropDown received "' .. event .. '" event, arguments:', ...)
 	end)
 end
 
 local defaults = {
 	checkbutton = true,
+	dropdown = 3,
 }
 
 local Panel = LibStub('Wasabi'):New('Wasabi', 'WasabiTestsDB', defaults)

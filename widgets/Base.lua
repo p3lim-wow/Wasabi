@@ -48,7 +48,7 @@ end
 
 function eventMethods:Fire(event, ...)
 	if(self._events[event]) then
-		self._events[event](self, ...)
+		self._events[event](self, event, ...)
 	end
 end
 
