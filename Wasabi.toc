@@ -3,5 +3,8 @@
 ## Version: Alpha
 ## Title: Wasabi
 ## Notes: Library for implementing addon configurations
+## OptionalDeps: LibStub
+
+LibStub\LibStub.lua
 
 Wasabi.xml
