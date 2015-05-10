@@ -1,13 +1,16 @@
 ## Interface: 60100
 ## Author: p3lim
-## Version: Alpha
+## Version: @project-version@
 ## Title: Wasabi
-## Notes: Library for implementing addon configurations
+## Notes: Library for implementing addon configs
 ## OptionalDeps: LibStub
-## SavedVariables: WasabiTestsDB, WasabiSubTestsDB
 
 LibStub\LibStub.lua
 
 Wasabi.xml
 
+#@do-not-package@
+## SavedVariables: WasabiTestsDB, WasabiSubTestsDB
+## DefaultState: disabled
 tests\options.lua
+#@end-do-not-package@
