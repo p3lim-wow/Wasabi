@@ -1,0 +1,7 @@
+## Interface: 60100
+## Author: p3lim
+## Version: Alpha
+## Title: Wasabi
+## Notes: Library for implementing addon configurations
+
+Wasabi.xml
