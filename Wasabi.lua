@@ -133,3 +133,23 @@ end
 function lib:GetWidgetVersion(type)
 	return self.widgetVersions[type]
 end
+
+lib.baseWidgets = CreateFrame('Frame')
+lib.baseWidgetVersions = {}
+function lib:RegisterBaseWidget(type, version, constructor)
+	local oldVersion = self.baseWidgetVersions[type]
+	if(oldVersion and oldVersion >= version) then
+		return
+	end
+
+	self.baseWidgets[type] = constructor
+	self.baseWidgetVersions[type] = version
+end
+
+function lib:GetBaseWidgetVersion(type)
+	return self.baseWidgetVersions[type]
+end
+
+function lib:InjectBaseWidget(widget, type)
+	self.baseWidgets[type](widget)
+end
