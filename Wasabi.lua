@@ -40,6 +40,7 @@ local function CreatePanelProto(name, db_glob, defaults)
 	panel.db_glob = db_glob
 
 	panel.temp = {}
+	panel.objects = {}
 
 	for method, func in next, methods do
 		panel[method] = func
@@ -67,7 +68,7 @@ end
 
 function methods:Initialize(constructor)
 	self:SetScript('OnShow', function()
-		constructor(self)
+		constructor(setmetatable(self, {__index = lib.widgets}))
 
 		self:refresh()
 		self:SetScript('OnShow', nil)
@@ -84,6 +85,9 @@ function methods:CreateChild(name, db_glob, defaults)
 end
 
 function methods:refresh()
+	for key, object in next, self.objects do
+		object:Update(self.db[key])
+	end
 end
 
 function methods:okay()
@@ -112,4 +116,20 @@ function lib:New(name, db_glob, defaults, parent)
 
 	InterfaceOptions_AddCategory(panel)
 	return panel
+end
+
+lib.widgets = CreateFrame('Frame')
+lib.widgetVersions = {}
+function lib:RegisterWidget(type, version, constructor)
+	local oldVersion = self.widgetVersions[type]
+	if(oldVersion and oldVersion >= version) then
+		return
+	end
+
+	self.widgets['Create' .. type] = constructor
+	self.widgetVersions[type] = version
+end
+
+function lib:GetWidgetVersion(type)
+	return self.widgetVersions[type]
 end
