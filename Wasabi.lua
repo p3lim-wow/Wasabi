@@ -6,38 +6,37 @@ if(not lib) then
 	return
 end
 
+local databases = {}
+
 local function OnEvent(self, event)
 	if(event == 'PLAYER_LOGIN') then
-		if(not _G[self.db_glob]) then
-			_G[self.db_glob] = self.defaults
+		if(not _G[self.svars]) then
+			_G[self.svars] = CopyTable(self.defaults)
 		end
 
-		self.db = _G[self.db_glob]
+		self.db = _G[self.svars]
 		for key, value in next, self.defaults do
 			if(self.db[key] == nil) then
 				self.db[key] = value
 			end
 		end
 
-		for key, value in next, self.db do
-			self.temp[key] = value
-		end
-	else
-		_G[self.db_glob] = self.db
+		self.temp = CopyTable(self.db)
 	end
 end
 
 local methods = {}
-local function CreatePanelProto(name, db_glob, defaults)
+local function CreatePanelProto(name, svars, defaults)
+	assert(not databases[svars], 'Savedvariables "' .. svars .. '" is already in use')
+
 	local panel = CreateFrame('Frame', nil, InterfaceOptionsFramePanelContainer)
 	panel:RegisterEvent('PLAYER_LOGIN')
-	panel:RegisterEvent('PLAYER_LOGOUT')
 	panel:HookScript('OnEvent', OnEvent)
 	panel:Hide()
 
 	panel.name = name
 	panel.defaults = defaults
-	panel.db_glob = db_glob
+	panel.svars = svars
 
 	panel.temp = {}
 	panel.objects = {}
@@ -45,6 +44,8 @@ local function CreatePanelProto(name, db_glob, defaults)
 	for method, func in next, methods do
 		panel[method] = func
 	end
+
+	databases[svars] = true
 
 	return panel
 end
@@ -75,9 +76,10 @@ function methods:Initialize(constructor)
 	end)
 end
 
-function methods:CreateChild(name, db_glob, defaults)
+function methods:CreateChild(name, svars, defaults)
 	assert(not self.parent, 'Cannot create child panel on a child panel.')
-	local panel = CreatePanelProto(name, db_glob, defaults)
+
+	local panel = CreatePanelProto(name, svars, defaults)
 	panel.parent = self.name
 
 	InterfaceOptions_AddCategory(panel)
@@ -86,33 +88,30 @@ end
 
 function methods:refresh()
 	for key, object in next, self.objects do
-		object:Update(self.db[key])
+		object:Update(self.temp[key])
 	end
 end
 
 function methods:okay()
 	for key, value in next, self.temp do
-		self.db[key] = value
+		if(self.db[key] ~= value) then
+			self.db[key] = value
+		end
 	end
 end
 
 function methods:default()
-	for key, value in next, self.defaults do
-		self.db[key] = value
-		self.temp[key] = value
-	end
+	table.wipe(self.temp)
+	self.temp = CopyTable(self.defaults)
 end
 
 function methods:cancel()
 	table.wipe(self.temp)
-
-	for key, value in next, self.db do
-		self.temp[key] = value
-	end
+	self.temp = CopyTable(self.db)
 end
 
-function lib:New(name, db_glob, defaults, parent)
-	local panel = CreatePanelProto(name, db_glob, defaults)
+function lib:New(name, svars, defaults)
+	local panel = CreatePanelProto(name, svars, defaults)
 
 	InterfaceOptions_AddCategory(panel)
 	return panel

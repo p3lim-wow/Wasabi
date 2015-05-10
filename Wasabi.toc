@@ -10,7 +10,7 @@ LibStub\LibStub.lua
 Wasabi.xml
 
 #@do-not-package@
-## SavedVariables: WasabiTestsDB, WasabiSubTestsDB
+## SavedVariables: WasabiDB, WasabiSubDB, WasabiObjectsDB
 ## DefaultState: disabled
 tests\options.lua
 #@end-do-not-package@

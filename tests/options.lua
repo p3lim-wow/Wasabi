@@ -56,10 +56,10 @@ local defaults = {
 	colorpicker = 'ff003399',
 }
 
-local Panel = LibStub('Wasabi'):New('Wasabi', 'WasabiTestsDB', defaults)
+local Panel = LibStub('Wasabi'):New('Wasabi', 'WasabiDB', defaults)
 Panel:AddSlash('/wa')
 Panel:AddSlash('/wasabi')
 Panel:Initialize(Config)
 
-local Sub = Panel:CreateChild('Subpanel', 'WasabiSubTestsDB', defaults)
+local Sub = Panel:CreateChild('Subpanel', 'WasabiSubDB', defaults)
 Sub:Initialize(Config)
