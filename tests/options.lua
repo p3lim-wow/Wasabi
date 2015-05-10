@@ -26,11 +26,22 @@ local function Config(self)
 	DropDown:On('Update', 'Toggle', 'ItemClick', function(self, event, ...)
 		print('DropDown received "' .. event .. '" event, arguments:', ...)
 	end)
+
+	local Slider = self:CreateSlider('slider')
+	Slider:SetPoint('TOPLEFT', DropDown, 'BOTTOMLEFT', 4, -14)
+	Slider:SetRange(1, 10)
+	Slider:SetStep(1) -- Defaults to 1
+	Slider:SetText('This is a Slider widget, with an an editbox')
+	Slider:SetNewFeature(true)
+	Slider:On('Update', function(self, event, ...)
+		print('Slider received "' .. event .. '" event, arguments:', ...)
+	end)
 end
 
 local defaults = {
 	checkbutton = true,
 	dropdown = 3,
+	slider = 1,
 }
 
 local Panel = LibStub('Wasabi'):New('Wasabi', 'WasabiTestsDB', defaults)

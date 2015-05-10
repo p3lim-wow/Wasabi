@@ -5,4 +5,5 @@
 	<Script file='widgets\FontStrings.lua'/>
 	<Script file='widgets\CheckButton.lua'/>
 	<Script file='widgets\DropDown.lua'/>
+	<Script file='widgets\Slider.lua'/>
 </Ui>
