@@ -48,6 +48,23 @@ local function CreatePanelProto(name, db_glob, defaults)
 	return panel
 end
 
+function methods:AddSlash(slash)
+	if(not self.slashIndex) then
+		self.slashIndex = 1
+		SlashCmdList[self.name] = function() self:ShowOptions() end
+	else
+		self.slashIndex = self.slashIndex + 1
+	end
+
+	_G['SLASH_' .. self.name .. self.slashIndex] = slash
+end
+
+function methods:ShowOptions()
+	-- On first load IOF doesn't select the right category or panel.
+	InterfaceOptionsFrame_OpenToCategory(self.name)
+	InterfaceOptionsFrame_OpenToCategory(self.name)
+end
+
 function methods:Initialize(constructor)
 	self:SetScript('OnShow', function()
 		constructor(self)
