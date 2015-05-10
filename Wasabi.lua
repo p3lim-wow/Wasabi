@@ -6,7 +6,48 @@ if(not lib) then
 	return
 end
 
+local function OnEvent(self, event)
+	if(event == 'PLAYER_LOGIN') then
+		if(not _G[self.db_glob]) then
+			_G[self.db_glob] = self.defaults
+		end
+
+		self.db = _G[self.db_glob]
+		for key, value in next, self.defaults do
+			if(self.db[key] == nil) then
+				self.db[key] = value
+			end
+		end
+
+		for key, value in next, self.db do
+			self.temp[key] = value
+		end
+	else
+		_G[self.db_glob] = self.db
+	end
+end
+
 local methods = {}
+local function CreatePanelProto(name, db_glob, defaults)
+	local panel = CreateFrame('Frame', nil, InterfaceOptionsFramePanelContainer)
+	panel:RegisterEvent('PLAYER_LOGIN')
+	panel:RegisterEvent('PLAYER_LOGOUT')
+	panel:HookScript('OnEvent', OnEvent)
+	panel:Hide()
+
+	panel.name = name
+	panel.defaults = defaults
+	panel.db_glob = db_glob
+
+	panel.temp = {}
+
+	for method, func in next, methods do
+		panel[method] = func
+	end
+
+	return panel
+end
+
 function methods:Initialize(constructor)
 	self:SetScript('OnShow', function()
 		constructor(self)
@@ -14,6 +55,15 @@ function methods:Initialize(constructor)
 		self:refresh()
 		self:SetScript('OnShow', nil)
 	end)
+end
+
+function methods:CreateChild(name, db_glob, defaults)
+	assert(not self.parent, 'Cannot create child panel on a child panel.')
+	local panel = CreatePanelProto(name, db_glob, defaults)
+	panel.parent = self.name
+
+	InterfaceOptions_AddCategory(panel)
+	return panel
 end
 
 function methods:refresh()
@@ -40,45 +90,9 @@ function methods:cancel()
 	end
 end
 
-local function OnEvent(self, event)
-	if(event == 'PLAYER_LOGIN') then
-		if(not _G[self.db_glob]) then
-			_G[self.db_glob] = self.defaults
-		end
-
-		self.db = _G[self.db_glob]
-		for key, value in next, self.defaults do
-			if(self.db[key] == nil) then
-				self.db[key] = value
-			end
-		end
-
-		for key, value in next, self.db do
-			self.temp[key] = value
-		end
-	else
-		_G[self.db_glob] = self.db
-	end
-end
-
-function lib:New(name, db_glob, defaults)
-	local panel = CreateFrame('Frame', nil, InterfaceOptionsFramePanelContainer)
-	panel:RegisterEvent('PLAYER_LOGIN')
-	panel:RegisterEvent('PLAYER_LOGOUT')
-	panel:HookScript('OnEvent', OnEvent)
-	panel:Hide()
-
-	panel.name = name
-	panel.defaults = defaults
-	panel.db_glob = db_glob
-
-	panel.temp = {}
-
-	for method, func in next, methods do
-		panel[method] = func
-	end
+function lib:New(name, db_glob, defaults, parent)
+	local panel = CreatePanelProto(name, db_glob, defaults)
 
 	InterfaceOptions_AddCategory(panel)
-
 	return panel
 end
