@@ -4,7 +4,10 @@
 ## Title: Wasabi
 ## Notes: Library for implementing addon configurations
 ## OptionalDeps: LibStub
+## SavedVariables: WasabiTestsDB, WasabiSubTestsDB
 
 LibStub\LibStub.lua
 
 Wasabi.xml
+
+tests\options.lua
