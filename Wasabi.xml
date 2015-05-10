@@ -1,3 +1,5 @@
 <Ui>
 	<Script file='Wasabi.lua'/>
+
+	<Script file='widgets\CheckButton.lua'/>
 </Ui>
