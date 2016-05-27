@@ -65,7 +65,7 @@ local defaults = {
 	checkbutton2 = false,
 	dropdown = 3,
 	slider = 1,
-	colorpicker = 'ff003399',
+	colorpicker = 'ff003399', -- argb
 }
 
 local Panel = LibStub('Wasabi'):New('Wasabi', 'WasabiDB', defaults)
@@ -73,7 +73,15 @@ Panel:AddSlash('/wa')
 Panel:AddSlash('/wasabi')
 Panel:Initialize(Config)
 
-local Sub = Panel:CreateChild('Subpanel', 'WasabiSubDB', defaults)
+local deafultsSub = {
+	checkbutton = false,
+	checkbutton2 = true,
+	dropdown = 2,
+	slider = 5,
+	colorpicker = '50993300', -- argb
+}
+
+local Sub = Panel:CreateChild('Subpanel', 'WasabiSubDB', deafultsSub)
 Sub:Initialize(Config)
 
 -- Fill a table with random colors
