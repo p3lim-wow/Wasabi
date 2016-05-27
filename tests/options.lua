@@ -47,10 +47,22 @@ local function Config(self)
 	ColorPicker:On('Open', function(self, event)
 		print('ColorPicker received "' .. event .. '" event')
 	end)
+
+	local CheckButton2 = self:CreateCheckButton('checkbutton2')
+	CheckButton2:SetPoint('TOPLEFT', ColorPicker, 'BOTTOMLEFT', 0, -400)
+	CheckButton2:SetText('This is a CheckButton widget, showcasing a dynamic scrolling panel')
+	-- CheckButton2:SetNewFeature(true)
+	CheckButton2:On('Update', function(self, event, value)
+		print('CheckButton2 received an update with value "' .. tostring(value) .. '"')
+	end)
+	CheckButton2:On('Click', function(self, event)
+		print('CheckButton2 received a click')
+	end)
 end
 
 local defaults = {
 	checkbutton = true,
+	checkbutton2 = false,
 	dropdown = 3,
 	slider = 1,
 	colorpicker = 'ff003399',

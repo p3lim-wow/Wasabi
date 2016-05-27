@@ -69,7 +69,25 @@ end
 
 function methods:Initialize(constructor)
 	self:SetScript('OnShow', function()
-		constructor(setmetatable(self, {__index = lib.widgets}))
+		local ScrollChild = CreateFrame('Frame', nil, self)
+		ScrollChild:SetHeight(1)
+		self.ScrollChild = ScrollChild
+
+		ScrollChild.defaults = self.defaults
+		ScrollChild.svars = self.svars
+		ScrollChild.temp = self.temp
+		ScrollChild.objects = self.objects
+
+		local Container = CreateFrame('ScrollFrame', nil, self)
+		Container:SetPoint('TOPLEFT', 6, -6)
+		Container:SetPoint('BOTTOMRIGHT', -6, 6)
+		Container:SetScrollChild(ScrollChild)
+		self.Container = Container
+
+		ScrollChild:SetWidth(Container:GetWidth())
+		constructor(setmetatable(ScrollChild, {__index = lib.widgets}))
+
+		self:UpdateSlider()
 
 		self:refresh()
 		self:SetScript('OnShow', nil)
@@ -108,6 +126,105 @@ end
 function methods:cancel()
 	table.wipe(self.temp)
 	self.temp = CopyTable(self.db)
+end
+
+local function CreateSlider(Frame)
+	local Slider = CreateFrame('Slider', nil, Frame.Container)
+	Slider:SetPoint('TOPRIGHT', 2, -14)
+	Slider:SetPoint('BOTTOMRIGHT', 2, 13)
+	Slider:SetWidth(16)
+	Frame.Slider = Slider
+
+	local Thumb = Frame.Container:CreateTexture()
+	Thumb:SetSize(16, 24)
+	Thumb:SetTexture([[Interface\Buttons\UI-ScrollBar-Knob]])
+	Thumb:SetTexCoord(1/4, 3/4, 1/8, 7/8)
+	Slider:SetThumbTexture(Thumb)
+
+	local Up = CreateFrame('Button', nil, Slider)
+	Up:SetPoint('BOTTOM', Slider, 'TOP')
+	Up:SetSize(16, 16)
+	Up:SetNormalTexture([[Interface\Buttons\UI-ScrollBar-ScrollUpButton-Up]])
+	Up:SetDisabledTexture([[Interface\Buttons\UI-ScrollBar-ScrollUpButton-Disabled]])
+	Up:SetHighlightTexture([[Interface\Buttons\UI-ScrollBar-ScrollUpButton-Highlight]])
+	Up:GetNormalTexture():SetTexCoord(1/4, 3/4, 1/4, 3/4)
+	Up:GetDisabledTexture():SetTexCoord(1/4, 3/4, 1/4, 3/4)
+	Up:GetHighlightTexture():SetTexCoord(1/4, 3/4, 1/4, 3/4)
+	Up:GetHighlightTexture():SetBlendMode('ADD')
+	Up:SetScript('OnClick', function()
+		Slider:SetValue(Slider:GetValue() - Slider:GetHeight() / 3)
+	end)
+
+	local Down = CreateFrame('Button', nil, Slider)
+	Down:SetPoint('TOP', Slider, 'BOTTOM')
+	Down:SetSize(16, 16)
+	Down:SetScript('OnClick', ScrollClick)
+	Down:SetNormalTexture([[Interface\Buttons\UI-ScrollBar-ScrollDownButton-Up]])
+	Down:SetDisabledTexture([[Interface\Buttons\UI-ScrollBar-ScrollDownButton-Disabled]])
+	Down:SetHighlightTexture([[Interface\Buttons\UI-ScrollBar-ScrollDownButton-Highlight]])
+	Down:GetNormalTexture():SetTexCoord(1/4, 3/4, 1/4, 3/4)
+	Down:GetDisabledTexture():SetTexCoord(1/4, 3/4, 1/4, 3/4)
+	Down:GetHighlightTexture():SetTexCoord(1/4, 3/4, 1/4, 3/4)
+	Down:GetHighlightTexture():SetBlendMode('ADD')
+	Down:SetScript('OnClick', function()
+		Slider:SetValue(Slider:GetValue() + Slider:GetHeight() / 3)
+	end)
+
+	Slider:SetScript('OnValueChanged', function(self, value)
+		local min, max = self:GetMinMaxValues()
+		if(value == min) then
+			Up:Disable()
+		else
+			Up:Enable()
+		end
+
+		if(value == max) then
+			Down:Disable()
+		else
+			Down:Enable()
+		end
+
+		self:GetParent():SetVerticalScroll(value)
+		Frame.ScrollChild:SetPoint('TOP', 0, value)
+	end)
+
+	Slider:SetScript('OnMinMaxChanged', function(self, min)
+		self:SetValue(self:GetValue() or min)
+	end)
+
+	Frame.Container:SetScript('OnMouseWheel', function(self, alpha)
+		if(alpha > 0) then
+			Slider:SetValue(Slider:GetValue() - Slider:GetHeight() / 3)
+		else
+			Slider:SetValue(Slider:GetValue() + Slider:GetHeight() / 3)
+		end
+	end)
+end
+
+function methods:UpdateSlider()
+	local containerWidth, containerHeight = self.Container:GetSize()
+	local _, _, _, childHeight = self.ScrollChild:GetBoundsRect()
+
+	local overflow = childHeight > containerHeight
+	if(overflow ~= self.overflow) then
+		self.overflow = overflow
+
+		if(overflow) then
+			if(not self.Slider) then
+				CreateSlider(self)
+			end
+
+			self.Slider:Show()
+			self.ScrollChild:SetWidth(containerWidth - 16)
+		elseif(self.Slider) then
+			self.Slider:Hide()
+			self.ScrollChild:SetWidth(containerWidth)
+		end
+	end
+
+	if(self.Slider) then
+		self.Slider:SetMinMaxValues(0, math.max(0, childHeight - containerHeight))
+	end
 end
 
 function lib:New(name, svars, defaults)
