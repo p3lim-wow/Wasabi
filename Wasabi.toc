@@ -1,7 +1,7 @@
 ## Interface: 60100
 ## Author: p3lim
 ## Version: @project-version@
-## Title: Wasabi
+## Title: Lib: Wasabi
 ## Notes: Library for implementing addon configs
 ## OptionalDeps: LibStub
 
