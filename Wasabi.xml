@@ -7,4 +7,5 @@
 	<Script file='widgets\DropDown.lua'/>
 	<Script file='widgets\Slider.lua'/>
 	<Script file='widgets\ColorPicker.lua'/>
+	<Script file='widgets\ObjectContainer.lua'/>
 </Ui>

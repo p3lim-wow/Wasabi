@@ -200,6 +200,7 @@ local function CreateSlider(Frame)
 		end
 	end)
 end
+lib.__createSlider = CreateSlider
 
 function methods:UpdateSlider()
 	local containerWidth, containerHeight = self.Container:GetSize()

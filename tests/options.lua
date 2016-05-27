@@ -75,3 +75,41 @@ Panel:Initialize(Config)
 
 local Sub = Panel:CreateChild('Subpanel', 'WasabiSubDB', defaults)
 Sub:Initialize(Config)
+
+-- Fill a table with random colors
+local defaults_objects = {objects={}}
+local r = math.random
+for index = 1, 100 do
+	defaults_objects.objects[index] = {r = r(), g = r(), b = r()}
+end
+
+local ObjectContainer = Panel:CreateChild('ObjectContainer', 'WasabiObjectsDB', defaults_objects)
+ObjectContainer:Initialize(function(self)
+	local Title = self:CreateTitle()
+	Title:SetPoint('TOPLEFT', 10, -10)
+	Title:SetFontObject('GameFontHighlight')
+	Title:SetText('A basic implementation of the ObjectContainer widget')
+
+	local Objects = self:CreateObjectContainer('objects')
+	Objects:SetPoint('TOPLEFT', 0, -30)
+	Objects:SetSize(self:GetWidth(), 526)
+	Objects:SetObjectSize(55, 85) -- Defaults to 30, 30
+	Objects:SetObjectSpacing(4) -- Defaults to 2
+	Objects:On('ObjectCreate', function(self, event, Object)
+		local Texture = Object:CreateTexture()
+		Texture:SetAllPoints()
+		Object:SetNormalTexture(Texture)
+	end)
+	Objects:On('ObjectUpdate', function(self, event, Object)
+		Object:GetNormalTexture():SetTexture(Object.value.r, Object.value.g, Object.value.b)
+	end)
+	Objects:On('ObjectClick', function(self, event, Object, button)
+		if(button == 'RightButton') then
+			Object:Remove()
+		end
+	end)
+	Objects:On('PreUpdate', 'PostUpdate', function(self, event, ...)
+		print('ObjectContainer received "' .. event .. '" event, arguments:', ...)
+	end)
+	-- Methods not listed: AddObject(key, value), RemoveObject(key) and HasObject(key)
+end)
