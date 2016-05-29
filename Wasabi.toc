@@ -11,6 +11,5 @@ Wasabi.xml
 
 #@do-not-package@
 ## SavedVariables: WasabiDB, WasabiSubDB, WasabiObjectsDB
-## DefaultState: disabled
 tests\options.lua
 #@end-do-not-package@
