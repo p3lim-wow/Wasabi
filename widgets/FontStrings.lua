@@ -4,9 +4,9 @@ if(not Wasabi) then
 end
 
 Wasabi:RegisterWidget('Title', 1, function(parent)
-	return parent:CreateFontString(nil, nil, 'GameFontNormalLarge')
+	return parent:CreateFontString('Title_' .. math.floor(GetTime() * 100), nil, 'GameFontNormalLarge')
 end)
 
 Wasabi:RegisterWidget('Description', 1, function(parent)
-	return parent:CreateFontString(nil, nil, 'GameFontHighlightSmallLeft')
+	return parent:CreateFontString('Description_' .. math.floor(GetTime() * 100), nil, 'GameFontHighlightSmallLeft')
 end)

@@ -74,16 +74,17 @@ local function OnTextChanged(self, ...)
 end
 
 Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
-	local globalName = 'WasabiSlider' .. GetTime()
-	local Slider = CreateFrame('Slider', globalName, panel, 'OptionsSliderTemplate')
+	local _NAME = panel:GetName() .. key:gsub('^%l', string.upper) .. widgetType
+
+	local Slider = CreateFrame('Slider', _NAME, panel, 'OptionsSliderTemplate')
 	Slider:SetScript('OnMouseWheel', OnMouseWheel)
 	Slider:SetScript('OnValueChanged', OnValueChanged)
 	Slider:SetScript('OnEnable', OnEnable)
 	Slider:SetScript('OnDisable', OnDisable)
 	Slider:SetObeyStepOnDrag(true)
-	Slider.Min = _G[globalName .. 'Low']
-	Slider.Max = _G[globalName .. 'High']
-	Slider.Thumb = _G[globalName .. 'Thumb']
+	Slider.Min = _G[_NAME .. 'Low']
+	Slider.Max = _G[_NAME .. 'High']
+	Slider.Thumb = _G[_NAME .. 'Thumb']
 	Slider.panel = panel
 	Slider.key = key
 

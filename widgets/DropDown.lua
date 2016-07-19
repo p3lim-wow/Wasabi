@@ -121,7 +121,9 @@ local function OnHide(self)
 end
 
 Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
-	local Frame = CreateFrame('Frame', nil, panel)
+	local _NAME = panel:GetName() .. key:gsub('^%l', string.upper) .. widgetType
+
+	local Frame = CreateFrame('Frame', _NAME, panel)
 	Frame:SetSize(110, 32)
 	Frame:SetScript('OnHide', OnHide)
 	Frame.panel = panel
@@ -132,18 +134,21 @@ Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
 	LeftTexture:SetSize(25, 64)
 	LeftTexture:SetTexture([[Interface\Glues\CharacterCreate\CharacterCreate-LabelFrame]])
 	LeftTexture:SetTexCoord(0, 0.1953125, 0, 1)
+	Frame.LeftTexture = LeftTexture
 
 	local RightTexture = Frame:CreateTexture()
 	RightTexture:SetPoint('TOPRIGHT', 14, 17)
 	RightTexture:SetSize(25, 64)
 	RightTexture:SetTexture([[Interface\Glues\CharacterCreate\CharacterCreate-LabelFrame]])
 	RightTexture:SetTexCoord(0.8046875, 1, 0, 1)
+	Frame.RightTexture = RightTexture
 
 	local CenterTexture = Frame:CreateTexture()
 	CenterTexture:SetPoint('TOPLEFT', LeftTexture, 'TOPRIGHT')
 	CenterTexture:SetPoint('TOPRIGHT', RightTexture, 'TOPLEFT')
 	CenterTexture:SetTexture([[Interface\Glues\CharacterCreate\CharacterCreate-LabelFrame]])
 	CenterTexture:SetTexCoord(0.1953125, 0.8046875, 0, 1)
+	Frame.CenterTexture = CenterTexture
 
 	local Button = CreateFrame('Button', nil, Frame)
 	Button:SetPoint('TOPRIGHT', RightTexture, -16, -18)
@@ -160,6 +165,7 @@ Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
 	Value:SetPoint('RIGHT', Button, 'LEFT')
 	Value:SetSize(0, 10)
 	Button:SetFontString(Value)
+	Button.Value = Value
 
 	local Menu = CreateFrame('Frame', nil, Frame)
 	Menu:SetPoint('TOPLEFT', Frame, 'BOTTOMLEFT', 0, 4)

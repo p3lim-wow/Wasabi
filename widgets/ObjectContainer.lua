@@ -140,7 +140,9 @@ function methods:HasObject(key)
 end
 
 Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
-	local Frame = CreateFrame('Frame', nil, panel)
+	local _NAME = panel:GetName() .. key:gsub('^%l', string.upper) .. widgetType
+
+	local Frame = CreateFrame('Frame', _NAME, panel)
 	Frame:SetBackdrop(BACKDROP)
 	Frame:SetBackdropColor(0, 0, 0, 1/2)
 	Frame.panel = panel

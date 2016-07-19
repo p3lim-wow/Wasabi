@@ -16,7 +16,9 @@ local function OnClick(self)
 end
 
 Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
-	local Button = CreateFrame('CheckButton', nil, panel, 'InterfaceOptionsCheckButtonTemplate')
+	local _NAME = panel:GetName() .. key:gsub('^%l', string.upper) .. widgetType
+
+	local Button = CreateFrame('CheckButton', _NAME, panel, 'InterfaceOptionsCheckButtonTemplate')
 	Button:SetScript('OnClick', OnClick)
 	Button.panel = panel
 	Button.key = key

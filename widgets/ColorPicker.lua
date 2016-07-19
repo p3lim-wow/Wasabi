@@ -67,7 +67,9 @@ local function OnClickPass(self, ...)
 end
 
 Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
-	local Button = CreateFrame('Button', nil, panel)
+	local _NAME = panel:GetName() .. key:gsub('^%l', string.upper) .. widgetType
+
+	local Button = CreateFrame('Button', _NAME, panel)
 	Button:SetSize(20, 20)
 	Button:SetScript('OnClick', OnClick)
 	Button.panel = panel
@@ -78,6 +80,7 @@ Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
 	Hover:SetScript('OnEnter', OnEnter)
 	Hover:SetScript('OnLeave', OnLeave)
 	Hover:SetScript('OnClick', OnClickPass)
+	Button.Hover = Hover
 
 	local Swatch = Button:CreateTexture(nil, 'OVERLAY')
 	Swatch:SetPoint('CENTER')
@@ -98,6 +101,7 @@ Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
 	Checkers:SetTexCoord(1/4, 0, 1/2, 1/4)
 	Checkers:SetDesaturated(true)
 	Checkers:SetVertexColor(1, 1, 1, 3/4)
+	Button.Checkers = Checkers
 
 	for method, func in next, methods do
 		Button[method] = func

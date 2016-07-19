@@ -29,7 +29,7 @@ local methods = {}
 local function CreatePanelProto(name, svars, defaults)
 	assert(not databases[svars], 'Savedvariables "' .. svars .. '" is already in use')
 
-	local panel = CreateFrame('Frame', nil, InterfaceOptionsFramePanelContainer)
+	local panel = CreateFrame('Frame', name .. 'OptionsPanel', InterfaceOptionsFramePanelContainer)
 	panel:RegisterEvent('PLAYER_LOGIN')
 	panel:HookScript('OnEvent', OnEvent)
 	panel:Hide()
@@ -69,7 +69,8 @@ end
 
 function methods:Initialize(constructor)
 	self:SetScript('OnShow', function()
-		local ScrollChild = CreateFrame('Frame', nil, self)
+		local _NAME = self:GetName()
+		local ScrollChild = CreateFrame('Frame', _NAME .. 'ScrollChild', self)
 		ScrollChild:SetHeight(1)
 		self.ScrollChild = ScrollChild
 
@@ -78,7 +79,7 @@ function methods:Initialize(constructor)
 		ScrollChild.temp = self.temp
 		ScrollChild.objects = self.objects
 
-		local Container = CreateFrame('ScrollFrame', nil, self)
+		local Container = CreateFrame('ScrollFrame', _NAME .. 'Container', self)
 		Container:SetPoint('TOPLEFT', 6, -6)
 		Container:SetPoint('BOTTOMRIGHT', -6, 6)
 		Container:SetScrollChild(ScrollChild)
@@ -129,19 +130,20 @@ function methods:cancel()
 end
 
 local function CreateSlider(Frame)
-	local Slider = CreateFrame('Slider', nil, Frame.Container)
+	local _NAME = Frame:GetName()
+	local Slider = CreateFrame('Slider', _NAME .. 'Slider', Frame.Container)
 	Slider:SetPoint('TOPRIGHT', 2, -14)
 	Slider:SetPoint('BOTTOMRIGHT', 2, 13)
 	Slider:SetWidth(16)
 	Frame.Slider = Slider
 
-	local Thumb = Frame.Container:CreateTexture()
+	local Thumb = Frame.Container:CreateTexture(_NAME .. 'Thumb')
 	Thumb:SetSize(16, 24)
 	Thumb:SetTexture([[Interface\Buttons\UI-ScrollBar-Knob]])
 	Thumb:SetTexCoord(1/4, 3/4, 1/8, 7/8)
 	Slider:SetThumbTexture(Thumb)
 
-	local Up = CreateFrame('Button', nil, Slider)
+	local Up = CreateFrame('Button', _NAME .. 'Up', Slider)
 	Up:SetPoint('BOTTOM', Slider, 'TOP')
 	Up:SetSize(16, 16)
 	Up:SetNormalTexture([[Interface\Buttons\UI-ScrollBar-ScrollUpButton-Up]])
@@ -155,7 +157,7 @@ local function CreateSlider(Frame)
 		Slider:SetValue(Slider:GetValue() - Slider:GetHeight() / 3)
 	end)
 
-	local Down = CreateFrame('Button', nil, Slider)
+	local Down = CreateFrame('Button', _NAME .. 'Down', Slider)
 	Down:SetPoint('TOP', Slider, 'BOTTOM')
 	Down:SetSize(16, 16)
 	Down:SetScript('OnClick', ScrollClick)
