@@ -51,6 +51,12 @@ function methods:Update(objectValues)
 		CreateOrUpdateObject(self, key, value)
 	end
 
+	for key, Object in next, self.objects do
+		if(not self.panel:GetVariable(key, self.key)) then
+			Object:Remove()
+		end
+	end
+
 	self:UpdatePositions()
 	self:Fire('PostUpdate')
 end
