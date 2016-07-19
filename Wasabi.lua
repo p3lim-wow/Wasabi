@@ -10,11 +10,11 @@ local databases = {}
 
 local function OnEvent(self, event)
 	if(event == 'PLAYER_LOGIN') then
-		if(not _G[self.svars]) then
-			_G[self.svars] = CopyTable(self.defaults)
+		if(not _G[self.glob]) then
+			_G[self.glob] = CopyTable(self.defaults)
 		end
 
-		self.db = _G[self.svars]
+		self.db = _G[self.glob]
 		for key, value in next, self.defaults do
 			if(self.db[key] == nil) then
 				self.db[key] = value
@@ -26,8 +26,8 @@ local function OnEvent(self, event)
 end
 
 local methods = {}
-local function CreatePanelProto(name, svars, defaults)
-	assert(not databases[svars], 'Savedvariables "' .. svars .. '" is already in use')
+local function CreatePanelProto(name, glob, defaults)
+	assert(not databases[glob], 'Savedvariables "' .. glob .. '" is already in use')
 
 	local panel = CreateFrame('Frame', name .. 'OptionsPanel', InterfaceOptionsFramePanelContainer)
 	panel:RegisterEvent('PLAYER_LOGIN')
@@ -36,7 +36,7 @@ local function CreatePanelProto(name, svars, defaults)
 
 	panel.name = name
 	panel.defaults = defaults
-	panel.svars = svars
+	panel.glob = glob
 
 	panel.temp = {}
 	panel.objects = {}
@@ -45,8 +45,18 @@ local function CreatePanelProto(name, svars, defaults)
 		panel[method] = func
 	end
 
-	databases[svars] = true
+	databases[glob] = true
 
+	return panel
+end
+
+function methods:CreateChild(name, glob, defaults)
+	assert(not self.parent, 'Cannot create child panel on a child panel.')
+
+	local panel = CreatePanelProto(name, glob, defaults)
+	panel.parent = self.name
+
+	InterfaceOptions_AddCategory(panel)
 	return panel
 end
 
@@ -95,14 +105,8 @@ function methods:Initialize(constructor)
 	end)
 end
 
-function methods:CreateChild(name, svars, defaults)
-	assert(not self.parent, 'Cannot create child panel on a child panel.')
 
-	local panel = CreatePanelProto(name, svars, defaults)
-	panel.parent = self.name
 
-	InterfaceOptions_AddCategory(panel)
-	return panel
 end
 
 function methods:refresh()
@@ -230,8 +234,8 @@ function methods:UpdateSlider()
 	end
 end
 
-function lib:New(name, svars, defaults)
-	local panel = CreatePanelProto(name, svars, defaults)
+function lib:New(name, glob, defaults)
+	local panel = CreatePanelProto(name, glob, defaults)
 
 	InterfaceOptions_AddCategory(panel)
 	return panel
