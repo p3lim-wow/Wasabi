@@ -28,7 +28,7 @@ function methods:Update(value)
 	value = math.min(math.max(value, min), max)
 	self:SetValue(value)
 	self.EditBox:SetText(value)
-	self.panel.temp[self.key] = value
+	self.panel:SetVariable(self.key, value)
 	self:Fire('Update', value)
 end
 
@@ -109,7 +109,7 @@ Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
 	-- Defaults
 	Slider:SetStep(1)
 
-	panel.objects[key] = Slider
+	panel:AddObject(key, Slider)
 
 	return Slider
 end)

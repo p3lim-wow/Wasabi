@@ -77,17 +77,18 @@ function methods:ShowOptions()
 	InterfaceOptionsFrame_OpenToCategory(self.name)
 end
 
+local internalMethods = {}
 function methods:Initialize(constructor)
 	self:SetScript('OnShow', function()
 		local _NAME = self:GetName()
 		local ScrollChild = CreateFrame('Frame', _NAME .. 'ScrollChild', self)
 		ScrollChild:SetHeight(1)
+		ScrollChild.panel = self
 		self.ScrollChild = ScrollChild
 
-		ScrollChild.defaults = self.defaults
-		ScrollChild.svars = self.svars
-		ScrollChild.temp = self.temp
-		ScrollChild.objects = self.objects
+		for method, func in next, internalMethods do
+			ScrollChild[method] = func
+		end
 
 		local Container = CreateFrame('ScrollFrame', _NAME .. 'Container', self)
 		Container:SetPoint('TOPLEFT', 6, -6)
@@ -105,8 +106,40 @@ function methods:Initialize(constructor)
 	end)
 end
 
+function internalMethods:GetVariable(key, nested)
+	if(nested) then
+		return self.panel.temp[nested][key]
+	else
+		return self.panel.temp[key]
+	end
+end
 
+function internalMethods:SetVariable(key, value, nested)
+	if(nested) then
+		self.panel.temp[nested][key] = value
+	else
+		self.panel.temp[key] = value
+	end
+end
 
+function internalMethods:DeleteVariable(key, nested)
+	if(nested) then
+		self.panel.temp[nested][key] = nil
+	else
+		self.panel.temp[key] = nil
+	end
+end
+
+function internalMethods:GetAllVariables(nested)
+	if(nested) then
+		return self.panel.temp[nested]
+	else
+		return self.panel.temp
+	end
+end
+
+function internalMethods:AddObject(key, object)
+	self.panel.objects[key] = object
 end
 
 function methods:refresh()

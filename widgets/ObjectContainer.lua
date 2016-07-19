@@ -44,10 +44,10 @@ local function CreateOrUpdateObject(self, key, value)
 end
 
 local methods = {}
-function methods:Update(objects)
+function methods:Update(objectValues)
 	self:Fire('PreUpdate')
 
-	for key, value in next, self.panel.temp[self.key] do
+	for key, value in next, objectValues do
 		CreateOrUpdateObject(self, key, value)
 	end
 
@@ -119,7 +119,7 @@ function methods:SetObjectSpacing(spacing)
 end
 
 function methods:AddObject(key, value)
-	self.panel.temp[self.key][key] = value or true
+	self.panel:SetVariable(key, value or true, self.key)
 	CreateOrUpdateObject(self, key, value)
 	self:UpdatePositions()
 end
@@ -128,7 +128,7 @@ function methods:RemoveObject(key)
 	local Object = self.objects[key]
 	if(Object) then
 		Object:Hide()
-		self.panel.temp[self.key][key] = nil
+		self.panel:DeleteVariable(key, self.key)
 		self.objects[key] = nil
 	end
 
@@ -169,7 +169,7 @@ Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
 	Frame:SetObjectSize(30)
 	Frame:SetObjectSpacing(2)
 
-	panel.objects[key] = Frame
+	panel:AddObject(key, Frame)
 
 	return Frame
 end)

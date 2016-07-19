@@ -11,7 +11,7 @@ function methods:Update(value)
 end
 
 local function OnClick(self)
-	self.panel.temp[self.key] = self:GetChecked()
+	self.panel:SetVariable(self.key, self:GetChecked())
 	self:Fire('Click')
 end
 
@@ -30,7 +30,7 @@ Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
 	Wasabi:InjectBaseWidget(Button, 'Text')
 	Wasabi:InjectBaseWidget(Button, 'Events')
 
-	panel.objects[key] = Button
+	panel:AddObject(key, Button)
 
 	return Button
 end)

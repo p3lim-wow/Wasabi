@@ -23,7 +23,7 @@ end
 function methods:Update(value)
 	local r, g, b, a = ToRGBA(value)
 	self.Swatch:SetVertexColor(r, g, b, a)
-	self.panel.temp[self.key] = value
+	self.panel:SetVariable(self.key, value)
 	self:Fire('Update', r, g, b, a, value)
 end
 
@@ -34,7 +34,7 @@ end
 local function OnClick(self)
 	self:Fire('Open')
 
-	local r, g, b, a = ToRGBA(self.panel.temp[self.key])
+	local r, g, b, a = ToRGBA(self.panel:GetVariable(self.key))
 	ColorPickerFrame:SetColorRGB(r or 1, g or 1, b or 1)
 	ColorPickerFrame.hasOpacity = self.hasAlpha
 	ColorPickerFrame.opacity = 1 - (a or 1)
@@ -110,7 +110,7 @@ Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
 	Wasabi:InjectBaseWidget(Button, 'Text')
 	Wasabi:InjectBaseWidget(Button, 'Events')
 
-	panel.objects[key] = Button
+	panel:AddObject(key, Button)
 
 	return Button
 end)

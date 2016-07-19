@@ -46,7 +46,7 @@ end
 
 local function OnValueClick(self)
 	local parent = self.parent
-	parent.panel.temp[parent.key] = self.key
+	parent.panel:SetVariable(parent.key, self.key)
 	parent.Button:SetText(self:GetText())
 	parent:Fire('ItemClick', self.key, self.value)
 	self:GetParent():Hide()
@@ -107,7 +107,7 @@ local function OnClick(self)
 		end
 
 		for key, Button in next, Menu.buttons do
-			Button.Check:SetChecked(key == parent.panel.temp[parent.key])
+			Button.Check:SetChecked(key == parent.panel:GetVariable(parent.key))
 		end
 
 		Menu:Show()
@@ -181,7 +181,7 @@ Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
 	Wasabi:InjectBaseWidget(Frame, 'Text')
 	Wasabi:InjectBaseWidget(Frame, 'Events')
 
-	panel.objects[key] = Frame
+	panel:AddObject(key, Frame)
 
 	return Frame
 end)
