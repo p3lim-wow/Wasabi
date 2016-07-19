@@ -72,7 +72,7 @@ function methods:AddSlash(slash)
 end
 
 function methods:ShowOptions()
-	-- On first load IOF doesn't select the right category or panel.
+	-- BUG: On first load IOF doesn't select the right category or panel.
 	InterfaceOptionsFrame_OpenToCategory(self.name)
 	InterfaceOptionsFrame_OpenToCategory(self.name)
 end
