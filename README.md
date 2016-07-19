@@ -1,14 +1,14 @@
 # Wasabi
 
-This is an addon for the popular MMORPG "World of Warcraft".
+This is an addon for the popular MMORPG "World of Warcraft".  
 It can be downloaded at [Curse](http://mods.curse.com/addons/wow/wasabi) or at [WoWInterface](http://wowinterface.com/downloads/info00000).
 
 ## Description
 
-Wasabi is a framework used to implement options for addons.
+Wasabi is a framework used to implement options for addons.  
 It has support for a multitude of different widgets, and will handle the savedvariables completely.
 
-For details on how to implement this in your own addon, please see the wiki:
+For details on how to implement this in your own addon, please see the wiki:  
 [https://github.com/p3lim-wow/Wasabi/wiki](https://github.com/p3lim-wow/Wasabi/wiki)
 
 ## Feedback
