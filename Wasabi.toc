@@ -5,9 +5,7 @@
 ## Notes: Library for implementing addon configs
 ## OptionalDeps: LibStub
 
-LibStub\LibStub.lua
-
-Wasabi.xml
+embed.xml
 
 #@do-not-package@
 ## SavedVariables: WasabiDB, WasabiSubDB, WasabiObjectsDB
