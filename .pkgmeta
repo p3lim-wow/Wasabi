@@ -8,3 +8,4 @@ optional-dependencies:
 
 ignore:
     - tests
+    - README.md
