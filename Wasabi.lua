@@ -146,6 +146,8 @@ function methods:refresh()
 	for key, object in next, self.objects do
 		object:Update(self.temp[key])
 	end
+
+	self:Fire('Refresh', self.temp)
 end
 
 function methods:okay()
@@ -154,16 +156,22 @@ function methods:okay()
 			self.db[key] = value
 		end
 	end
+
+	self:Fire('Okay', self.temp)
 end
 
 function methods:default()
 	table.wipe(self.temp)
 	self.temp = CopyTable(self.defaults)
+
+	self:Fire('Default', self.defaults)
 end
 
 function methods:cancel()
 	table.wipe(self.temp)
 	self.temp = CopyTable(self.db)
+
+	self:Fire('Cancel', self.temp)
 end
 
 local function CreateSlider(Frame)
@@ -308,4 +316,23 @@ end
 
 function lib:InjectBaseWidget(widget, type)
 	self.baseWidgets[type](widget)
+end
+
+-- not really a fan of CallbackHandler-1.0
+local callbacks = {}
+function methods:Fire(event, ...)
+	local eventCallbacks = callbacks[event]
+	if(eventCallbacks) then
+		for _, callback in next, eventCallbacks do
+			callback(...)
+		end
+	end
+end
+
+function methods:On(event, callback)
+	if(not callbacks[event]) then
+		callbacks[event] = {}
+	end
+
+	table.insert(callbacks[event], callback)
 end
