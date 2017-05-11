@@ -109,7 +109,7 @@ ObjectContainer:Initialize(function(self)
 		Object:SetNormalTexture(Texture)
 	end)
 	Objects:On('ObjectUpdate', function(self, event, Object)
-		Object:GetNormalTexture():SetTexture(Object.value.r, Object.value.g, Object.value.b)
+		Object:GetNormalTexture():SetColorTexture(Object.value.r, Object.value.g, Object.value.b)
 	end)
 	Objects:On('ObjectClick', function(self, event, Object, button)
 		if(button == 'RightButton') then
