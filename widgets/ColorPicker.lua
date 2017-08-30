@@ -50,7 +50,7 @@ local function OnClick(self)
 	end
 
 	ShowUIPanel(ColorPickerFrame)
-	PlaySound('igMainMenuOptionCheckBoxOn')
+	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 end
 
 local function OnEnter(self)
