@@ -5,6 +5,8 @@
 ## Notes: Library for implementing addon configs
 ## OptionalDeps: LibStub
 
+LibStub\LibStub.lua
+
 embed.xml
 
 #@do-not-package@

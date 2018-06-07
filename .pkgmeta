@@ -3,7 +3,7 @@ package-as: Wasabi
 enable-nolib-creation: no
 
 externals:
-  LibStub: svn://svn.wowace.com/wow/libstub/mainline/tags/1.0
+  LibStub: https://repos.wowace.com/wow/libstub/trunk
 
 optional-dependencies:
   - libstub
@@ -11,3 +11,4 @@ optional-dependencies:
 ignore:
   - README.md
   - tests
+  - utils
