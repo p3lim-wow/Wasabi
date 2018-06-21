@@ -5,6 +5,9 @@
 ## Notes: Library for implementing addon configs
 ## OptionalDeps: LibStub
 
+## X-Curse-Project-ID: 101134
+## X-WoWI-ID: 24061
+
 LibStub\LibStub.lua
 
 embed.xml
