@@ -8,7 +8,7 @@ addons:
 
 branches:
   only:
-  - /^\d+.*?$
+  - /^\d+?-?\w+?$/
 
 env:
   global:
