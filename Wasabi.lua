@@ -22,6 +22,8 @@ local function OnEvent(self, event, arg1)
 		end
 
 		self.temp = CopyTable(self.db)
+
+		self:UnregisterEvent(event)
 	end
 end
 
