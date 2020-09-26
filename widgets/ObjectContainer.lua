@@ -148,7 +148,7 @@ end
 Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
 	local _NAME = panel:GetName() .. key:gsub('^%l', string.upper) .. widgetType
 
-	local Frame = CreateFrame('Frame', _NAME, panel)
+	local Frame = CreateFrame('Frame', _NAME, panel, BackdropTemplateMixin and 'BackdropTemplate')
 	Frame:SetBackdrop(BACKDROP)
 	Frame:SetBackdropColor(0, 0, 0, 1/2)
 	Frame.panel = panel

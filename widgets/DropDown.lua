@@ -167,7 +167,7 @@ Wasabi:RegisterWidget(widgetType, widgetVersion, function(panel, key)
 	Button:SetFontString(Value)
 	Button.Value = Value
 
-	local Menu = CreateFrame('Frame', nil, Frame)
+	local Menu = CreateFrame('Frame', nil, Frame, BackdropTemplateMixin and 'BackdropTemplate')
 	Menu:SetPoint('TOPLEFT', Frame, 'BOTTOMLEFT', 0, 4)
 	Menu:SetBackdrop(BACKDROP)
 	Menu:SetFrameStrata('DIALOG')
